@@ -15,29 +15,27 @@ uniform float reflectivity;
 uniform vec3 skyColor;
 
 void main(void) {
-	
-	vec3 unitNormal = normalize(surfaceNormal);
-	vec3 unitLightVector = normalize(toLightVector);
-	
-	float nDotl = dot(unitNormal,unitLightVector);
-	float brightness = max(nDotl,0.3);
-	vec3 diffuse = brightness * lightColor;
-	
-	vec3 unitVectorToCamera = normalize(toCameraVector);
-	vec3 lightDirection = -unitLightVector;
-	vec3 reflectedLightDirection = reflect(lightDirection,unitNormal);
 
-	float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);
-	specularFactor = max(specularFactor,0.0);
-	float dampedFactor = pow(specularFactor,shineDamper);
-	vec3 finalSpecular = dampedFactor * reflectivity * lightColor;
+    vec3 unitNormal = normalize(surfaceNormal);
+    vec3 unitLightVector = normalize(toLightVector);
 
-	vec4 textureColor = texture(textureSampler,pass_textureCoords);
-	if (textureColor.a<0.5) {
-		discard;
-	}
+    float nDotl = dot(unitNormal,unitLightVector);
+    float brightness = max(nDotl,0.3);
+    vec3 diffuse = brightness * lightColor;
 
-	out_Color = vec4(diffuse,1.0)* texture(textureSampler,pass_textureCoords) + vec4(finalSpecular,1.0);
-	out_Color = mix(vec4(skyColor,1.0),out_Color, visibility);
+    vec3 unitVectorToCamera = normalize(toCameraVector);
+    vec3 reflectedDir = normalize(-reflect(unitVectorToCamera, unitNormal));
+    float specularFactor = pow(max(dot(reflectedDir,unitLightVector),0.),shineDamper);
+    vec3 finalSpecular = clamp(specularFactor * reflectivity * lightColor, 0., 1.);
+
+    vec4 textureColor = texture(textureSampler,pass_textureCoords);
+    if (textureColor.a<0.5) {
+        discard;
+    }
+
+    out_Color = vec4(diffuse,1.0)* textureColor + vec4(finalSpecular,0.0);
+    out_Color = mix(vec4(skyColor,1.0),out_Color, visibility);
+
+    //out_Color.xyz = vec3(abs(finalSpecular));
 
 }

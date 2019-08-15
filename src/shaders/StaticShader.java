@@ -9,8 +9,8 @@ import toolbox.Maths;
 
 public class StaticShader extends ShaderProgram{
 	
-	private static final String VERTEX_FILE = "src/shaders/vertexShader.glsl";
-	private static final String FRAGMENT_FILE = "src/shaders/fragmentShader.glsl";
+	private static final String VERTEX_FILE = "bin/shaders/vertexShader.glsl";
+	private static final String FRAGMENT_FILE = "bin/shaders/fragmentShader.glsl";
 	
 	private int transformationMatrix;
 	private int projectionMatrix;

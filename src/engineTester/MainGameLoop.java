@@ -65,7 +65,7 @@ public class MainGameLoop {
 			z = random.nextFloat() * 800;
 			grasses.add(new Entity(texturedGrassModel, new Vector3f(x,y,z), 0,0,0,1));
 		}
-		Light light = new Light(new Vector3f(400,300,400), new Vector3f(1,1,1));
+		Light light = new Light(new Vector3f(400,250,400), new Vector3f(1,1,1));
 		
 		Terrain terrain = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("grass")));
 		
